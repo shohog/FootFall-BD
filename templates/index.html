@@ -14,36 +14,6 @@
  -->
  <!DOCTYPE html>
 
- <html>
-
-
-    <head>
-       <style>
-           h3{
-            text-align: center;
-            font-size: 100px;
-        }
-       </style>
-    <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
-
-
-    </head>
-
-    <body>
-
-
-        <div style="width: 100%; text-align: center;">
-            <img  src="https://lh3.googleusercontent.com/fIHiabSxo-m2y4COxODfXWQ75_ZKTpX3AYNciuGdsqk7Nz0Pwa0X0xUgZfi_MMk3iocG8n_vy4lStHCpkfN02ErTGIXYXIdhqODr9ioP3A" height="30%" width="40%"  />
-        </div>
-
-
-    </body>
-    <script defer src="https://pyscript.net/latest/pyscript.js"></script>
-
-    </html>
-
-
-
 <html>
 <head>
 <style>
@@ -70,24 +40,146 @@
   appearance: none;
   letter-spacing: 25px;
 }
+html, body{
+  height: 50%;
+  font-weight: 800;
+  margin: 0;
+  padding: 0;
+}
+
+body{
+  background: black;
+  font-family: Arial;
+}
+
+.container {
+  display: flex;
+/*   border:1px solid red; */
+  height: 100%;
+  min-width: 100%;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+}
+
+svg {
+    display: block;
+    font: 10.5em 'Montserrat';
+    width: 960px;
+    height: 300px;
+    margin: 0 auto;
+}
+#running {
+  display: none;
+}
+.text-copy {
+    fill: none;
+    stroke: white;
+    stroke-dasharray: 6% 29%;
+    stroke-width: 5px;
+    stroke-dashoffset: 0%;
+    animation: stroke-offset 5s infinite linear;
+}
+
+.text-copy:nth-child(1){
+	stroke: #4D163D;
+	animation-delay: -1;
+}
+
+.text-copy:nth-child(2){
+	stroke: #1518be;
+	animation-delay: -2s;
+}
+
+.text-copy:nth-child(3){
+	stroke: #BD0034;
+	animation-delay: -3s;
+}
+
+.text-copy:nth-child(4){
+	stroke: #00bd29;
+	animation-delay: -4s;
+}
+
+.text-copy:nth-child(5){
+	stroke: #FDB731;
+	animation-delay: -5s;
+}
+
+@keyframes stroke-offset{
+	100% {stroke-dashoffset: -35%;}
+}
 </style>
 </head>
 <body>
-
+  <div style="width: 100%; text-align: center;">
+    <img  src="https://lh3.googleusercontent.com/fIHiabSxo-m2y4COxODfXWQ75_ZKTpX3AYNciuGdsqk7Nz0Pwa0X0xUgZfi_MMk3iocG8n_vy4lStHCpkfN02ErTGIXYXIdhqODr9ioP3A" height="30%" width="40%"  />
+</div>
   <div style="text-align: center; width: 100%; margin-top: 50px;">
       <a id="runButton" class="button" type="button" href="/analyzing">RUN</a>
     
   </div>
-  <div id="running" class="center">
-      <p style="color:rgb(0, 0, 0);font-size:60px;">Analysis is running . . . It will take forever!</p>
-  </div>    
+
+  <div id="running" class="container">
+    <svg viewBox="0 0 960 300">
+      <symbol id="s-text">
+        <text text-anchor="middle" x="50%" y="80%">ANALYZING</text>
+      </symbol>
+  
+      <g class = "g-ants">
+        <use xlink:href="#s-text" class="text-copy"></use>
+        <use xlink:href="#s-text" class="text-copy"></use>
+        <use xlink:href="#s-text" class="text-copy"></use>
+        <use xlink:href="#s-text" class="text-copy"></use>
+        <use xlink:href="#s-text" class="text-copy"></use>
+      </g>
+    </svg>
+  </div> 
+
   <script>
     var running = document.querySelector("#running")
     var btn = document.querySelector("#runButton")
 
     btn.addEventListener("click", function(e){
         running.style.display = "block"
+        btn.style.display = "none"
     })
+
+    let heading = document.querySelector(".heading");
+let count = 0;
+let countTwo = heading.dataset.title.length;
+
+setTimeout(myFunc, 1000);
+
+function myFunc() {
+  let name = heading.dataset.title;
+  heading.innerHTML = "";
+
+  setInterval(() => {
+    runFunc();
+  }, 1500);
+
+  function runFunc() {
+    if (count < name.length) {
+      let createSpan = document.createElement("span");
+      createSpan.setAttribute("class", " ");
+      createSpan.setAttribute("class", "animationOne");
+      createSpan.innerHTML = name.charAt(count);
+      heading.append(createSpan);
+      count++;
+    } else {
+      heading.children[countTwo-1].className = "animationTwo";
+      countTwo--;
+      if (countTwo <= 0) {
+        heading.innerHTML = " ";
+        count = 0;
+        countTwo = heading.dataset.title.length;
+      }
+    }
+  }
+}
+
   </script> 
 
 </body>
