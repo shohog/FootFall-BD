@@ -52,6 +52,8 @@
   width: 60%;
   border: 3px solid #73AD21;
   padding: 10px;
+  margin-top: 100px;
+  display: none;
 }
 .button {
   background-color: #4CAF50; /* Green */
@@ -72,15 +74,21 @@
 </head>
 <body>
 
+  <div style="text-align: center; width: 100%; margin-top: 50px;">
+      <a id="runButton" class="button" type="button" href="/analyzing">RUN</a>
+    
+  </div>
+  <div id="running" class="center">
+      <p style="color:rgb(0, 0, 0);font-size:60px;">Analysis is running . . . It will take forever!</p>
+  </div>    
+  <script>
+    var running = document.querySelector("#running")
+    var btn = document.querySelector("#runButton")
 
-
-<div class="center">
-  <p style="color:rgb(0, 0, 0);font-size:60px;">Analysis is running . . . It will take forever!</p>
-</div>
-<div style="text-align: center; width: 100%; margin-top: 50px;">
-  <a class="button" type="button" href="/analyzing">RUN</a>
-
-</div>
+    btn.addEventListener("click", function(e){
+        running.style.display = "block"
+    })
+  </script> 
 
 </body>
 </html>
