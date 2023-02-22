@@ -30,15 +30,7 @@
     </head>
 
     <body>
-      <py-script> 
-        import flask
-        from flask import Flask
-        app = Flask(__name__)
 
-
-        @app.route('/analyzing')
-      </py-script>|
-      <button> <a href="/analyzing">Run</a></button>
 
         <div style="width: 100%; text-align: center;">
             <img  src="https://lh3.googleusercontent.com/fIHiabSxo-m2y4COxODfXWQ75_ZKTpX3AYNciuGdsqk7Nz0Pwa0X0xUgZfi_MMk3iocG8n_vy4lStHCpkfN02ErTGIXYXIdhqODr9ioP3A" height="30%" width="40%"  />
@@ -61,6 +53,21 @@
   border: 3px solid #73AD21;
   padding: 10px;
 }
+.button {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  width: 40%;
+  appearance: none;
+  letter-spacing: 25px;
+}
 </style>
 </head>
 <body>
@@ -68,7 +75,11 @@
 
 
 <div class="center">
-  <p style="color:yellow;font-size:60px;">Analysis is running . . . It will take forever!</p>
+  <p style="color:rgb(0, 0, 0);font-size:60px;">Analysis is running . . . It will take forever!</p>
+</div>
+<div style="text-align: center; width: 100%; margin-top: 50px;">
+  <a class="button" type="button" href="/analyzing">RUN</a>
+
 </div>
 
 </body>
