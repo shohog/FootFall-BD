@@ -1,0 +1,5 @@
+.vscode/
+*.mp4
+__pycache__
+MOT16_eval
+*.pt
