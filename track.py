@@ -287,21 +287,19 @@ def run(
 
                             width = im0.shape[1]
                             height = im0.shape[0]
-                            start_point = (width-350, 220) #im0.shape[1]-350=w, h=0,
-                            end_point = (width-160, 220)
-                            cv2.line(im0, start_point, end_point, color, thickness=2)
-                            start_point = (width-360, 230) #im0.shape[1]-350=w, h=0,
-                            end_point = (width-160, 230)
-                            cv2.line(im0, start_point, end_point, color, thickness=2)
                             
-
-
-                            #vertical lines
-                            start_point = (width-350, 220)   #im0.shape[1]-350=w, h=0,
-                            end_point = (width-360, 230)
+                            start_point = (width-550, 200) #im0.shape[1]-350=w, h=0,
+                            end_point = (width-330, 200)
                             cv2.line(im0, start_point, end_point, color, thickness=2)
-                            start_point = (width-160, 220) #im0.shape[1]-350=w, h=0,
-                            end_point = (width-160, 230)
+                            start_point = (width-550, 215) #im0.shape[1]-350=w, h=0,
+                            end_point = (width-330, 215)
+                            cv2.line(im0, start_point, end_point, color, thickness=2)
+                            #vertical lines
+                            start_point = (width-550, 200)   #im0.shape[1]-350=w, h=0,
+                            end_point = (width-550, 215) 
+                            cv2.line(im0, start_point, end_point, color, thickness=2)
+                            start_point = (width-330, 200) #im0.shape[1]-350=w, h=0,
+                            end_point = (width-330, 215)
                             cv2.line(im0, start_point, end_point, color, thickness=2)
 
 
@@ -312,26 +310,24 @@ def run(
                             font = cv2.FONT_HERSHEY_SIMPLEX
                             fontScale = 1
                             cv2.putText(im0, "mgate : " + str(count), org, font, 
-                            fontScale, color, thickness, cv2.LINE_AA)
-                            
-                        
+                            fontScale, color, thickness, cv2.LINE_AA)                                             
                             #hline 1
-                            start_point = (width - 290, height-100)
-                            end_point = (width-50, height-100)
+                            start_point = (width - 260, height-150)
+                            end_point = (width-200, height-150)
                             cv2.line(im0, start_point, end_point, color, thickness=2)
                             #hline 2
-                            start_point = (width - 290, height-5)
-                            end_point = (width-50, height-5)
+                            start_point = (width - 260, height-50)
+                            end_point = (width-200, height-50)
                             cv2.line(im0, start_point, end_point, color, thickness=2)
                             cv2.putText(im0, "sgate : " + str(customer), (5,70), font, 
                             fontScale, color, thickness, cv2.LINE_AA)
 
                             #vertical lines
-                            start_point = (width - 290, height-100)
-                            end_point = (width - 290, height-5)
+                            start_point = (width - 260, height-150)
+                            end_point = (width - 260, height-50)
                             cv2.line(im0, start_point, end_point, color, thickness=2)
-                            start_point = (width-50, height-100)
-                            end_point = (width-50, height-5)
+                            start_point = (width-200, height-150)
+                            end_point = (width-200, height-50)
                             cv2.line(im0, start_point, end_point, color, thickness=2)                                                
                             
                             #print(count)
@@ -441,13 +437,13 @@ def count_obj(box,w,h,id):
     #center_coordinates = (int(box(0), int(box(1))))
     
     #for vertical line I used x coordinate of centre
-    if 220<b2<230 and b1 < w-160: #or q >= (h-250) and q >= (h-260) or q >= (h-235): #and p >= (w-350) and p <= (w-170):
+    if 200<b2<215 and b1 < w-330: #or q >= (h-250) and q >= (h-260) or q >= (h-235): #and p >= (w-350) and p <= (w-170):
         if id not in data1:
             count += 1
             data1.append(id)
     
     #for horizontal line I used y coordinate of centre
-    elif h-5 > b2 > h-100 and b1 > w-290:
+    elif h-150 < b2 < h-50 and b1 > w-260:
         if id not in data2:
             customer += 1
             data2.append(id)

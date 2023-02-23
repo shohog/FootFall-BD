@@ -29,10 +29,7 @@ title.insert_after(meta) """
 url = "https://0300-103-169-159-101.in.ngrok.io/api/videos"
 app = Flask(__name__)
 
-""" @app.route('/')
-def indexx():
-    return render_template('indexx.html')
- """
+
 @app.route('/')
 def home():
    return render_template('index.html')
@@ -70,7 +67,6 @@ def run_script():
                         details = {"totalCrowd": None, "totalCount" : None}
                 else:
                     count = contents.split(',')
-                    print("clear")
                 #x = json.loads(contents)
                     totalCrowd = int(count[0])
                     totalCount = int(count[1])
