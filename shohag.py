@@ -26,7 +26,7 @@ meta['http-equiv'] = "Content-Type"
 title.insert_after(meta) """
 
 
-url = "https://0300-103-169-159-101.in.ngrok.io/api/videos"
+url = "https://d44e-103-169-159-101.in.ngrok.io/api/videos/"
 app = Flask(__name__)
 
 
@@ -135,4 +135,4 @@ def run_script():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True) #port=8080
