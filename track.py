@@ -57,7 +57,7 @@ data2 = []
 def run(
         vid_id = '0',
         source='0',
-        yolo_weights=WEIGHTS / 'crowdhuman_yolov5m.pt',  # model.pt path(s),
+        yolo_weights=WEIGHTS / 'crowdhuman_yolov5l.pt',  # model.pt path(s),
         strong_sort_weights=WEIGHTS / 'osnet_x0_25_msmt17.pt',  # model.pt path,
         config_strongsort=ROOT / 'strong_sort/configs/strong_sort.yaml',
         imgsz=(640, 640),  # inference size (height, width)
@@ -96,13 +96,8 @@ def run(
     is_url = source.lower().startswith(('rtsp://', 'rtmp://', 'http://', 'https://'))
     webcam = source.isnumeric() or source.endswith('.txt') or (is_url and not is_file)
     if is_url and is_file:
-        try :
-            source = check_file(source)  # download
-        except:
-            f = open("./runs/track.txt", 'r+')
-            f.truncate(0)
-            #with open("./runs/track.txt", 'w') as f:
-                #f.write(str(0))
+        source = check_file(source)  # download
+
 
         
     # Directories
@@ -258,6 +253,7 @@ def run(
                         
                         
                         
+                        
                         cls = output[5]
                     
                     
@@ -281,7 +277,7 @@ def run(
 
                             thickness = 2
                             fontScale = 1
-                            font = cv2.FONT_HERSHEY_SIMPLEX
+                            font = cv2.FONT_HERSHEY_COMPLEX_SMALL
 
                             
 
@@ -309,7 +305,7 @@ def run(
                             org = (5, 30)
                             font = cv2.FONT_HERSHEY_SIMPLEX
                             fontScale = 1
-                            cv2.putText(im0, "Customer : " + str(count), org, font, 
+                            cv2.putText(im0, "Customer: " + str(count), org, font, 
                             fontScale, color, thickness, cv2.LINE_AA)   
 
 
@@ -322,7 +318,7 @@ def run(
                             start_point = (width - 350, height-240)
                             end_point = (width-380, height-240)
                             cv2.line(im0, start_point, end_point, color, thickness=2)
-                            cv2.putText(im0, "Pedestrian : " + str(customer), (5,70), font, 
+                            cv2.putText(im0, "Pedestrian: " + str(customer), (5,70), font, 
                             fontScale, color, thickness, cv2.LINE_AA)
 
                             #vertical lines
@@ -399,7 +395,7 @@ def run(
                         w = int(vid_cap.get(cv2.CAP_PROP_FRAME_WIDTH))
                         h = int(vid_cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
                     else:  # stream
-                        fps, w, h = 30, im0.shape[1], im0.shape[0]
+                        fps, w, h = 25, im0.shape[1], im0.shape[0]
                     save_path = str(Path(save_path).with_suffix('.mp4'))  # force *.mp4 suffix on results videos
                     vid_writer[i] = cv2.VideoWriter(save_path, cv2.VideoWriter_fourcc(*'mp4v'), fps, (w, h))
                 vid_writer[i].write(im0)
@@ -415,7 +411,7 @@ def run(
     if update:
         strip_optimizer(yolo_weights)  # update model (to fix SourceChangeWarning)
      
-    #os.remove(source)
+    os.remove(source)
 
 
 """
@@ -445,12 +441,14 @@ def count_obj(box,w,h,id):
     
     #for vertical line I used x coordinate of centre
     if 280 < b2 < 300 and w-450 < b1 < w-250: #or q >= (h-250) and q >= (h-260) or q >= (h-235): #and p >= (w-350) and p <= (w-170):
+        
         if id not in data1:
             count += 1
             data1.append(id)
     #(640,480) = (w,h)
     #for horizontal line I used y coordinate of centre
     elif h-330 < b2 < h-240 and w - 350 > b1 > w-380:
+        print(id)
         if id not in data2:
             customer += 1
             data2.append(id)
