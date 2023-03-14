@@ -37,8 +37,7 @@ def run_script():
 
 
 
-    grahok = 0
-    pothochari = 0   
+  
     for i in jsonData:    
     #if i["is_processed"]==1:
         result = subprocess.run(['/usr/bin/python3', 'track.py', '--source', i["url"], '--vid_id', i["_id"]], capture_output=True)
@@ -59,6 +58,11 @@ def run_script():
                 details = {"totalCrowd": totalCrowd, "totalCount" : totalCount}
                 #details = json.dumps(details)
                 # details = json.load(details)
+                with open("./runs/farma.txt") as fy:
+                    upadan = fy.read()
+                    figure = upadan.split(',')
+                    grahok = int(figure[0])
+                    pothochari = int(figure[1])
 
                 grahok += totalCrowd
                 pothochari  += totalCount
