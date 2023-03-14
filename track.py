@@ -301,7 +301,7 @@ def run(
                             font = cv2.FONT_HERSHEY_COMPLEX_SMALL               
                             width = im0.shape[1]
                             height = im0.shape[0]
-                            cv2.putText(im0, "Pedestrian : " + str(customer), (5, 30), font, fontScale, color, thickness, cv2.LINE_AA)
+                            cv2.putText(im0, "Customer : " + str(customer), (5, 30), font, fontScale, color, thickness, cv2.LINE_AA)
 
                             start_point = pco11 
                             end_point = pco12
@@ -322,7 +322,7 @@ def run(
                                
 
 
-                            cv2.putText(im0, "Customer : " + str(count), (5,70), font, fontScale, color, thickness, cv2.LINE_AA)
+                            cv2.putText(im0, "Pedestrian : " + str(count), (5,70), font, fontScale, color, thickness, cv2.LINE_AA)
                             #hline 1
                             start_point = cco11
                             end_point = cco12
@@ -469,14 +469,14 @@ def count_obj(box,w,h,id):
     #center_coordinates = (int(box(0), int(box(1))))
     
     #for vertical line I used x coordinate of centre
-    if d1 <= b2 <= d3 and d2 <= b1 <= d4: #or q >= (h-250) and q >= (h-260) or q >= (h-235): #and p >= (w-350) and p <= (w-170):
+    if d1 <= b1 <= d3 and d2 <= b2 <= d4: #or q >= (h-250) and q >= (h-260) or q >= (h-235): #and p >= (w-350) and p <= (w-170):
         
         if id not in data1:
             count += 1
             data1.append(id)
     #(640,480) = (w,h)
     #for horizontal line I used y coordinate of centre
-    elif t1 <= b2 <= t3 and t2 <= b1 <= t4:
+    elif t1 <= b1 <= t3 and t2 <= b2 <= t4:
         if id not in data2:
             customer += 1
             data2.append(id)
