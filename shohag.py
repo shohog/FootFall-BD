@@ -7,8 +7,7 @@ import json
 import os
 import csv
 
-grahok = 0
-pothochari = 0
+
 url = "https://8767-103-169-159-101.in.ngrok.io/api/videos/"
 app = Flask(__name__)
 
@@ -38,7 +37,8 @@ def run_script():
 
 
 
-        
+    grahok = 0
+    pothochari = 0   
     for i in jsonData:    
     #if i["is_processed"]==1:
         result = subprocess.run(['/usr/bin/python3', 'track.py', '--source', i["url"], '--vid_id', i["_id"]], capture_output=True)
@@ -59,6 +59,7 @@ def run_script():
                 details = {"totalCrowd": totalCrowd, "totalCount" : totalCount}
                 #details = json.dumps(details)
                 # details = json.load(details)
+
                 grahok += totalCrowd
                 pothochari  += totalCount
                 with open("./runs/farma.txt", 'w') as f:
