@@ -5,7 +5,7 @@ import link
 from link import get_link
 import sqlite3
 import argparse
-
+import csv
 import os
 # limit the number of cpus used by high performance libraries
 os.environ["OMP_NUM_THREADS"] = "1"
@@ -47,11 +47,33 @@ logging.getLogger().removeHandler(logging.getLogger().handlers[0])
 
 VID_FORMATS = 'asf', 'avi', 'gif', 'm4v', 'mkv', 'mov', 'mp4', 'mpeg', 'mpg', 'ts', 'wmv'  # include video suffixes
 
+
+
+
+
 exposed = []
 count = 0
 customer = 0
 data1 = []
 data2 = []
+#ROI
+d1, d2, d3, d4 = 420, 200, 500, 430
+pco11 = (d1,d2)
+pco12 = (d3,d2)
+pco21 = (d1,d4)
+pco22 = (d3,d4)
+
+t1, t2, t3, t4 = 0, 440, 500, 480
+cco11 = (t1,t2)
+cco12 = (t3,t2)
+cco21 = (t1,t4)
+cco22 = (t3,t4)
+
+
+
+
+
+
 
 @torch.no_grad()
 def run(
@@ -273,74 +295,68 @@ def run(
                         if save_vid or save_crop or show_vid:  # Add bbox to image
 
                             global count
-                            color=(0,255,255)
-
+                            color=(0,255,255)                       
                             thickness = 2
                             fontScale = 1
-                            font = cv2.FONT_HERSHEY_COMPLEX_SMALL
-
-                            
-
+                            font = cv2.FONT_HERSHEY_COMPLEX_SMALL               
                             width = im0.shape[1]
                             height = im0.shape[0]
-                            
-                            start_point = (width-450, 300) #im0.shape[1]-350=w, h=0,
-                            end_point = (width-250, 300)
+                            cv2.putText(im0, "Customer : " + str(count), (5, 30), font, fontScale, color, thickness, cv2.LINE_AA)
+
+                            start_point = pco11 
+                            end_point = pco12
                             cv2.line(im0, start_point, end_point, color, thickness=2)
-                            start_point = (width-450, 280) #im0.shape[1]-350=w, h=0,
-                            end_point = (width-250, 280)
+
+                            start_point = pco21 
+                            end_point = pco22
                             cv2.line(im0, start_point, end_point, color, thickness=2)
+
                             #vertical lines
-                            start_point = (width-450, 300)   #im0.shape[1]-350=w, h=0,
-                            end_point = (width-450, 280) 
-                            cv2.line(im0, start_point, end_point, color, thickness=2)
-                            start_point = (width-250, 300) #im0.shape[1]-350=w, h=0,
-                            end_point = (width-250, 280)
+                            start_point = pco11  
+                            end_point = pco21
                             cv2.line(im0, start_point, end_point, color, thickness=2)
 
+                            start_point = pco12 
+                            end_point = pco22
+                            cv2.line(im0, start_point, end_point, color, thickness=2)
+                               
 
 
-
-                            
-                            org = (5, 30)
-                            font = cv2.FONT_HERSHEY_SIMPLEX
-                            fontScale = 1
-                            cv2.putText(im0, "Customer: " + str(count), org, font, 
-                            fontScale, color, thickness, cv2.LINE_AA)   
-
-
-
+                            cv2.putText(im0, "Pedestrian : " + str(customer), (5,70), font, fontScale, color, thickness, cv2.LINE_AA)
                             #hline 1
-                            start_point = (width - 350, height-330)
-                            end_point = (width-380, height-330)
+                            start_point = cco11
+                            end_point = cco12
                             cv2.line(im0, start_point, end_point, color, thickness=2)
+
                             #hline 2
-                            start_point = (width - 350, height-240)
-                            end_point = (width-380, height-240)
+                            start_point = cco21
+                            end_point = cco22
                             cv2.line(im0, start_point, end_point, color, thickness=2)
-                            cv2.putText(im0, "Pedestrian: " + str(customer), (5,70), font, 
-                            fontScale, color, thickness, cv2.LINE_AA)
+                            
 
                             #vertical lines
-                            start_point = (width - 350, height-330)
-                            end_point = (width - 350, height-240)
+                            start_point = cco11
+                            end_point = cco21
                             cv2.line(im0, start_point, end_point, color, thickness=2)
-                            start_point = (width-380, height-330)
-                            end_point = (width-380, height-240)
-                            cv2.line(im0, start_point, end_point, color, thickness=2)                                                
+
+                            start_point = cco12
+                            end_point = cco22
+                            cv2.line(im0, start_point, end_point, color, thickness=2) 
+
+                            
+
+
+
+
+
+
+                                               
                             
                             #print(count)
                             #print(customer)
                             #print(bboxes)
 
 
-        
-                            #centroid
-                            color=(0,255,255)
-
-                            thickness = 2
-                            fontScale = 1
-                            font = cv2.FONT_HERSHEY_SIMPLEX
                             b1, b2 = (int(bboxes[0]+(bboxes[2]-bboxes[0])/2) , int(bboxes[1]+bboxes[3]-bboxes[1]))
                             center_coordinates = (b1, b2)
                             cv2.circle(im0, center_coordinates, radius=3, color=(0,255,255), thickness=2)
@@ -353,6 +369,7 @@ def run(
                                 f.write(str(customer))
                             #with open(txt_path2 + '.txt', 'w') as f:
                                 #f.write(str(customer))
+
 
                             cv2.imshow(str(p), im0)
                             if cv2.waitKey(1) == ord('q'):
@@ -414,6 +431,7 @@ def run(
     os.remove(source)
 
 
+
 """
     conn = sqlite3.connect('pythonDB.db')
     c = conn.cursor()
@@ -427,6 +445,17 @@ def run(
 
 
 
+# d1, d2, d3, d4 = 420, 200, 500, 430 # boxwidth = 450, 
+# pco11 = (d1,d2)
+# pco12 = (d3,d2)
+# pco21 = (d1,d4)
+# pco22 = (d3,d4)
+
+# t1, t2, t3, t4 = 0, 440, 500, 480
+# cco11 = (t1,t2)
+# cco12 = (t3,t2)
+# cco21 = (t1,t4)
+# cco22 = (t3,t4)
 
 def count_obj(box,w,h,id):
     global count, customer, data1, data2, person
@@ -440,65 +469,18 @@ def count_obj(box,w,h,id):
     #center_coordinates = (int(box(0), int(box(1))))
     
     #for vertical line I used x coordinate of centre
-    if 280 < b2 < 300 and w-450 < b1 < w-250: #or q >= (h-250) and q >= (h-260) or q >= (h-235): #and p >= (w-350) and p <= (w-170):
+    if t1 <= b2 <= t3 and t2 <= b1 <= t4: #or q >= (h-250) and q >= (h-260) or q >= (h-235): #and p >= (w-350) and p <= (w-170):
         
         if id not in data1:
             count += 1
             data1.append(id)
     #(640,480) = (w,h)
     #for horizontal line I used y coordinate of centre
-    elif h-330 < b2 < h-240 and w - 350 > b1 > w-380:
-        print(id)
+    elif d1 <= b2 <= d3 and d2 <= b1 <= d4:
         if id not in data2:
             customer += 1
             data2.append(id)
     
-"""
-
-start_point = (width-450, 300) #im0.shape[1]-350=w, h=0,
-end_point = (width-250, 300)
-cv2.line(im0, start_point, end_point, color, thickness=2)
-start_point = (width-450, 280) #im0.shape[1]-350=w, h=0,
-end_point = (width-250, 280)
-cv2.line(im0, start_point, end_point, color, thickness=2)
-#vertical lines
-start_point = (width-450, 300)   #im0.shape[1]-350=w, h=0,
-end_point = (width-450, 280) 
-cv2.line(im0, start_point, end_point, color, thickness=2)
-start_point = (width-250, 300) #im0.shape[1]-350=w, h=0,
-end_point = (width-250, 280)
-cv2.line(im0, start_point, end_point, color, thickness=2)
-
-
-
-
-
-org = (5, 30)
-font = cv2.FONT_HERSHEY_SIMPLEX
-fontScale = 1
-cv2.putText(im0, "Customer : " + str(count), org, font, 
-fontScale, color, thickness, cv2.LINE_AA)   
-
-
-
-#hline 1
-start_point = (width - 350, height-330)
-end_point = (width-380, height-330)
-cv2.line(im0, start_point, end_point, color, thickness=2)
-#hline 2
-start_point = (width - 350, height-240)
-end_point = (width-380, height-240)
-cv2.line(im0, start_point, end_point, color, thickness=2)
-cv2.putText(im0, "Pedestrian : " + str(customer), (5,70), font, 
-fontScale, color, thickness, cv2.LINE_AA)
-
-#vertical lines
-start_point = (width - 350, height-330)
-end_point = (width - 350, height-240)
-cv2.line(im0, start_point, end_point, color, thickness=2)
-start_point = (width-380, height-330)
-end_point = (width-380, height-240)
-cv2.line(im0, start_point, end_point, color, thickness=2)   """
 
 def parse_opt():
     parser = argparse.ArgumentParser()

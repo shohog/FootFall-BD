@@ -5,8 +5,10 @@ import subprocess
 import requests
 import json
 import os
+import csv
 
-
+grahok = 0
+pothochari = 0
 url = "https://8767-103-169-159-101.in.ngrok.io/api/videos/"
 app = Flask(__name__)
 
@@ -41,6 +43,8 @@ def run_script():
     #if i["is_processed"]==1:
         result = subprocess.run(['/usr/bin/python3', 'track.py', '--source', i["url"], '--vid_id', i["_id"]], capture_output=True)
         vid_id = i["_id"]
+
+
   
         with open("./runs/track.txt") as fk:
             contents = fk.read()
@@ -51,19 +55,28 @@ def run_script():
             #x = json.loads(contents)
                 totalCrowd = int(count[0])
                 totalCount = int(count[1])
+                #Need to send dict, not string
                 details = {"totalCrowd": totalCrowd, "totalCount" : totalCount}
                 #details = json.dumps(details)
                 # details = json.load(details)
+                grahok += totalCrowd
+                pothochari  += totalCount
+                with open("./runs/farma.txt", 'w') as f:
+                    f.write(str(grahok))
+                    f.write(str(','))
+                    f.write(str(pothochari))
+            with open("./runs/trackk.csv", 'a') as csvfile:
+                writer = csv.writer(csvfile)
+                writer.writerow([i["createdAt"][0:8], totalCrowd, totalCount])
 
 
             #print(totalCrowd)
             #print(type(totalCrowd))
             
             
-
-            print(f"{url}{vid_id}")
+            
+            print(f"{vid_id}")
             print(details)
-            print(type(details))
 
             
         
