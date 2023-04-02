@@ -19,6 +19,7 @@ import numpy as np
 from pathlib import Path
 import torch
 import torch.backends.cudnn as cudnn
+import tensorflow as tf
 
 FILE = Path(__file__).resolve()
 ROOT = FILE.parents[0]  # yolov5 strongsort root directory
@@ -57,13 +58,14 @@ customer = 0
 data1 = []
 data2 = []
 #ROI
-d1, d2, d3, d4 = 420, 200, 500, 430
+#Vertical
+d1, d2, d3, d4 = 255, 140, 355, 385 #x1.y1,x2,y2
 pco11 = (d1,d2)
 pco12 = (d3,d2)
 pco21 = (d1,d4)
 pco22 = (d3,d4)
-
-t1, t2, t3, t4 = 0, 440, 500, 480
+#Horizontal
+t1, t2, t3, t4 = 420, 390, 610, 410
 cco11 = (t1,t2)
 cco12 = (t3,t2)
 cco21 = (t1,t4)
@@ -174,20 +176,36 @@ def run(
         )
         strongsort_list[i].model.warmup()
     outputs = [None] * nr_sources
-
+    
     # Run tracking
     model.warmup(imgsz=(1 if pt else nr_sources, 3, *imgsz))  # warmup
     dt, seen = [0.0, 0.0, 0.0, 0.0], 0
     curr_frames, prev_frames = [None] * nr_sources, [None] * nr_sources
     for frame_idx, (path, im, im0s, vid_cap, s) in enumerate(dataset):
         t1 = time_sync()
+        #im = np.rollaxis(im, 2, start=0)
+        #im = np.rollaxis(im, 2, start=1)
+        #im = np.flip(im, -1).copy()
+        #im = np.flip
+
+
         im = torch.from_numpy(im).to(device)
         im = im.half() if half else im.float()  # uint8 to fp16/32
         im /= 255.0  # 0 - 255 to 0.0 - 1.0
+       
         if len(im.shape) == 3:
             im = im[None]  # expand for batch dim
         t2 = time_sync()
         dt[0] += t2 - t1
+        # im = im.cpu()
+        # im = im.numpy()
+        # im = cv2.flip(im, im, flipCode=1)
+        
+        #im = torch.flip(im.cpu().clone().detach(), [0, 1])
+        
+        
+        
+
 
         # Inference
         visualize = increment_path(save_dir / Path(path[0]).stem, mkdir=True) if visualize else False
@@ -343,18 +361,6 @@ def run(
                             end_point = cco22
                             cv2.line(im0, start_point, end_point, color, thickness=2) 
 
-                            
-
-
-
-
-
-
-                                               
-                            
-                            #print(count)
-                            #print(customer)
-                            #print(bboxes)
 
 
                             b1, b2 = (int(bboxes[0]+(bboxes[2]-bboxes[0])/2) , int(bboxes[1]+bboxes[3]-bboxes[1]))
@@ -428,7 +434,7 @@ def run(
     if update:
         strip_optimizer(yolo_weights)  # update model (to fix SourceChangeWarning)
      
-    os.remove(source)
+    #os.remove(source)
 
 
 
@@ -489,7 +495,7 @@ def parse_opt():
     parser.add_argument('--config-strongsort', type=str, default='strong_sort/configs/strong_sort.yaml')
     parser.add_argument('--source', type=str, default='False', help='file/dir/URL/glob, 0 for webcam')  
     parser.add_argument('--imgsz', '--img', '--img-size', nargs='+', type=int, default=[640], help='inference size h,w')
-    parser.add_argument('--conf-thres', type=float, default=0.5, help='confidence threshold')
+    parser.add_argument('--conf-thres', type=float, default=0.4, help='confidence threshold')
     parser.add_argument('--iou-thres', type=float, default=0.5, help='NMS IoU threshold')
     parser.add_argument('--max-det', type=int, default=1000, help='maximum detections per image')
     parser.add_argument('--device', default='0', help='cuda device, i.e. 0 or 0,1,2,3 or cpu')

@@ -8,7 +8,7 @@ import os
 import csv
 
 
-url = "https://8767-103-169-159-101.in.ngrok.io/api/videos/"
+url = "https://8000-103-169-159-101.in.ngrok.io/api/videos/"
 app = Flask(__name__)
 
 
@@ -58,7 +58,7 @@ def run_script():
                 details = {"totalCrowd": totalCrowd, "totalCount" : totalCount}
                 #details = json.dumps(details)
                 # details = json.load(details)
-                with open("./runs/farma.txt") as fy:
+                with open("./runs/total.txt") as fy:
                     upadan = fy.read()
                     figure = upadan.split(',')
                     grahok = int(figure[0])
@@ -66,13 +66,13 @@ def run_script():
 
                 grahok += totalCrowd
                 pothochari  += totalCount
-                with open("./runs/farma.txt", 'w') as f:
+                with open("./runs/total.txt", 'w') as f:
                     f.write(str(grahok))
                     f.write(str(','))
                     f.write(str(pothochari))
             with open("./runs/trackk.csv", 'a') as csvfile:
                 writer = csv.writer(csvfile)
-                writer.writerow([i["createdAt"][0:8], totalCrowd, totalCount])
+                writer.writerow([i["createdAt"][0:-3], i["_id"], totalCrowd, totalCount])
 
 
             #print(totalCrowd)
@@ -105,7 +105,7 @@ def run_script():
         
         
         
-        requests.patch(f"https://8767-103-169-159-101.in.ngrok.io/api/videos/{vid_id}", data = details)
+        requests.patch(f"{url}{vid_id}", data = details)
         
             
     
@@ -132,4 +132,4 @@ def run_script():
 
 
 if __name__ == "__main__":
-    app.run(debug=True) #port=8080
+    app.run(debug=False) #port=8080
